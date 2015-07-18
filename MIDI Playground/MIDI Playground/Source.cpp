@@ -1,24 +1,15 @@
 #include "MidiFile.h"
 #include "Notes.h"
 
+#include "StoredData.h"
+#include "FileHandling.h"
 #include <boost\filesystem.hpp>
-#include <iostream>
-#include <memory> //Upgrade to shared pointers
-#include <string>
-#include <vector>
 #include <numeric>
 #include <cmath>
-#include <array>
 
 char notes[12] = { 'Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G' };
-std::vector<std::array<int, 12>>*  CountedValues = new std::vector<std::array<int, 12>>();
-std::vector<boost::filesystem::path>* Files = new std::vector<boost::filesystem::path>();
-std::vector<std::vector<std::vector<int>>>* OctaveStack = new std::vector<std::vector<std::vector<int>>>();
-std::vector<std::vector<std::vector<int>>>* Velocities  = new std::vector<std::vector<std::vector<int>>>();
-std::vector<std::vector<std::vector<int>>>* NoteLengths = new std::vector<std::vector<std::vector<int>>>();
-std::vector<std::vector<std::vector<int>>>* NoteContextFour = new std::vector<std::vector<std::vector<int>>>();
-std::vector<std::vector<std::vector<int>>>* NoteContextEight = new std::vector<std::vector<std::vector<int>>>();
-std::vector<std::vector<std::vector<int>>>* NoteContextSixteen = new std::vector<std::vector<std::vector<int>>>();
+StoredData *data;
+
 int averageVelocity = NULL;
 
 void parseMidiFiles() 
@@ -28,9 +19,9 @@ void parseMidiFiles()
 	//Run contains function to get bool + octave pair
 	Notes note;
 	std::array<int,12> countVals = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	for (unsigned a = 0; a < Files->size(); a++)
+	for (unsigned a = 0; a < data->Files->size(); a++)
 	{
-		MidiFile file(Files->at(a).string());
+		MidiFile file(data->Files->at(a).string());
 		std::vector<std::vector<int>> trackOctavesPerFile, trackVelocitiesPerFile, trackNoteLengthsPerFile;
 		for (int i = 0; i < file.getTrackCount(); i++)
 		{
@@ -57,10 +48,10 @@ void parseMidiFiles()
 			trackVelocitiesPerFile.push_back(trackVelocities);
 			trackNoteLengthsPerFile.push_back(trackNoteLengths);
 		}
-		OctaveStack->push_back(trackOctavesPerFile);
-		Velocities->push_back(trackVelocitiesPerFile);
-		NoteLengths->push_back(trackNoteLengthsPerFile);
-		CountedValues->push_back(countVals);
+		data->OctaveStack->push_back(trackOctavesPerFile);
+		data->Velocities->push_back(trackVelocitiesPerFile);
+		data->NoteLengths->push_back(trackNoteLengthsPerFile);
+		data->CountedValues->push_back(countVals);
 	}
 }
 
@@ -78,20 +69,20 @@ int main()
 		{
 			if (boost::filesystem::is_regular_file(it->status()))
 			{
-				Files->push_back(*it);
+				data->Files->push_back(*it);
 			}
 		}
 	}
 	catch (const boost::filesystem::filesystem_error& err)
 	{
-		std::cout << "An unexpected error occurred: " << err.what() << std::endl;
+		FileHandling::writeErrorToLog(UNEXPECTED_ERROR, err.what());
 	} 
 
 	//Create the file, parse it.
 	parseMidiFiles();
-	for (unsigned i = 0; i < CountedValues->size(); ++i)
+	for (unsigned i = 0; i < data->CountedValues->size(); ++i)
 	{
-		for (int note : CountedValues->at(i))
+		for (int note : data->CountedValues->at(i))
 		{
 			std::cout << note << std::endl;
 		}

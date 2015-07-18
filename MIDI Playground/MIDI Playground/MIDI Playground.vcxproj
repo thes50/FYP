@@ -53,12 +53,16 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\boost_1_57_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -80,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="Analysis.cpp" />
     <ClCompile Include="Binasc.cpp" />
+    <ClCompile Include="FileHandling.cpp" />
     <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiEventList.cpp" />
     <ClCompile Include="MidiFile.cpp" />
@@ -91,12 +96,14 @@
   <ItemGroup>
     <ClInclude Include="Analysis.h" />
     <ClInclude Include="Binasc.h" />
+    <ClInclude Include="FileHandling.h" />
     <ClInclude Include="MidiEvent.h" />
     <ClInclude Include="MidiEventList.h" />
     <ClInclude Include="MidiFile.h" />
     <ClInclude Include="MidiMessage.h" />
     <ClInclude Include="Notes.h" />
     <ClInclude Include="Options.h" />
+    <ClInclude Include="StoredData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
