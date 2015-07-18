@@ -18,18 +18,39 @@ bool writeErrorToLog(std::string error, std::string cause)
 	return false;
 }
 
-bool FileHandling::save()
+bool FileHandling::save(StoredData* data)
 {
-	return FileHandling::save(path);
+	return FileHandling::save(path, data);
 }
-bool FileHandling::save(std::string newPath)
+bool FileHandling::save(std::string newPath, StoredData* data)
 {
 	std::string outputFile = newPath;
 	std::ofstream file;
 	file.open(outputFile, std::ios::out);
 	if (file.is_open())
 	{
-		//foreach struct in StoredData
+		file << "OctaveStack" << std::endl;
+		for (unsigned i = 0; i < data->OctaveStack->size(); i++)
+		{
+			/*
+				Let each line be a track with each row being a set of values
+			*/
+			for (unsigned y = 0; y < data->OctaveStack->at(i).size(); y++)
+			{
+				for (unsigned z = 0; data->OctaveStack->at(i).at(y).size(); z++)
+				{
+
+				}
+			}
+		}
+		for (unsigned i = 0; i < data->Velocities->size(); i++)
+		{
+
+		}
+		for (unsigned i = 0; i < data->NoteLengths->size(); i++)
+		{
+
+		}
 		file.close();
 		return true;
 	}

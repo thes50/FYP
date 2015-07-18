@@ -8,7 +8,6 @@
 #include <cmath>
 
 char notes[12] = { 'Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G' };
-StoredData *data;
 
 int averageVelocity = NULL;
 
@@ -18,6 +17,7 @@ void parseMidiFiles()
 	//If command byte == 0x90 (note-on) then get value.
 	//Run contains function to get bool + octave pair
 	Notes note;
+
 	std::array<int,12> countVals = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	for (unsigned a = 0; a < data->Files->size(); a++)
 	{
