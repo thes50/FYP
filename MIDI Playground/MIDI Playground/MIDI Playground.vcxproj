@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="Analysis.cpp" />
     <ClCompile Include="Binasc.cpp" />
+    <ClCompile Include="Data.h" />
     <ClCompile Include="FileHandling.cpp" />
     <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiEventList.cpp" />
@@ -103,7 +104,6 @@
     <ClInclude Include="MidiMessage.h" />
     <ClInclude Include="Notes.h" />
     <ClInclude Include="Options.h" />
-    <ClInclude Include="StoredData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

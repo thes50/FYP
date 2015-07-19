@@ -1,12 +1,29 @@
-﻿Build started 18/07/2015 23:23:23.
-     1>Project "C:\Users\Matt\Documents\GitHub\FYP\MIDI Playground\MIDI Playground\MIDI Playground.vcxproj" on node 2 (Build target(s)).
+﻿Build started 19/07/2015 01:55:24.
+     1>Project "D:\GitHub\FYP\MIDI Playground\MIDI Playground\MIDI Playground.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\boost_1_57_0 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt FileHandling.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\boost_1_57_0 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt Data.h FileHandling.cpp Source.cpp
          FileHandling.cpp
-     1>c:\users\matt\documents\github\fyp\midi playground\midi playground\filehandling.cpp(33): error C3312: no callable 'begin' function found for type 'unknown'
-     1>c:\users\matt\documents\github\fyp\midi playground\midi playground\filehandling.cpp(33): error C3312: no callable 'end' function found for type 'unknown'
-     1>Done Building Project "C:\Users\Matt\Documents\GitHub\FYP\MIDI Playground\MIDI Playground\MIDI Playground.vcxproj" (Build target(s)) -- FAILED.
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         Data.h
+         Source.cpp
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\FYP\MIDI Playground\Debug\MIDI Playground.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\boost_1_57_0\stage\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\FYP\MIDI Playground\Debug\MIDI Playground.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\FYP\MIDI Playground\Debug\MIDI Playground.lib" /MACHINE:X86 Debug\Analysis.obj
+         Debug\Binasc.obj
+         Debug\Data.obj
+         Debug\FileHandling.obj
+         Debug\MidiEvent.obj
+         Debug\MidiEventList.obj
+         Debug\MidiFile.obj
+         Debug\MidiMessage.obj
+         Debug\Notes.obj
+         Debug\Options.obj
+         Debug\Source.obj
+         MIDI Playground.vcxproj -> D:\GitHub\FYP\MIDI Playground\Debug\MIDI Playground.exe
+       BscMake:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"D:\GitHub\FYP\MIDI Playground\Debug\MIDI Playground.bsc" /n Debug\Analysis.sbr Debug\Binasc.sbr Debug\Data.sbr Debug\FileHandling.sbr Debug\MidiEvent.sbr Debug\MidiEventList.sbr Debug\MidiFile.sbr Debug\MidiMessage.sbr Debug\Notes.sbr Debug\Options.sbr Debug\Source.sbr
+     1>Done Building Project "D:\GitHub\FYP\MIDI Playground\MIDI Playground\MIDI Playground.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:03.27
+Time Elapsed 00:00:02.87

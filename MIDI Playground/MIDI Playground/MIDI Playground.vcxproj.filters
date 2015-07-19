@@ -45,6 +45,9 @@
     <ClCompile Include="FileHandling.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Data.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MidiFile.h">
@@ -72,9 +75,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileHandling.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StoredData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

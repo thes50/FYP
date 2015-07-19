@@ -2,8 +2,34 @@
 
 const std::string FileHandling::path = "saves/";
 
-bool writeErrorToLog(std::string error, std::string cause)
+bool FileHandling::createDirectoryIfNotValid(std::string path) 
 {
+	if (!boost::filesystem::is_directory(boost::filesystem::path(path)))
+	{
+		boost::filesystem::create_directory(boost::filesystem::path(path));
+	}
+	return true;
+}
+bool FileHandling::writeToLog(std::string message)
+{
+	createDirectoryIfNotValid("logs");
+	std::string outputFile = "logs/logs.log";
+	std::ofstream file;
+	file.open(outputFile, std::ios::out | std::ios::app);
+	if (file.is_open())
+	{
+		std::cout << message << std::endl;
+		file << message << std::endl;
+		file.close();
+		return true;
+	}
+	writeErrorToLog(FILE_HANDLING_ERROR, "Logging");
+	return false;
+}
+
+bool FileHandling::writeErrorToLog(std::string error, std::string cause)
+{
+	createDirectoryIfNotValid("logs");
 	std::string outputFile = "logs/error.log";
 	std::ofstream file;
 	file.open(outputFile, std::ios::out | std::ios::app);
@@ -18,13 +44,14 @@ bool writeErrorToLog(std::string error, std::string cause)
 	return false;
 }
 
-bool FileHandling::save(StoredData* data)
+bool FileHandling::save(DATA* data)
 {
 	return FileHandling::save(path, data);
 }
-bool FileHandling::save(std::string newPath, StoredData* data)
+bool FileHandling::save(std::string newPath, DATA* data)
 {
 	std::string outputFile = newPath;
+	createDirectoryIfNotValid(outputFile);
 	std::ofstream file;
 	file.open(outputFile, std::ios::out);
 	if (file.is_open())
@@ -32,20 +59,29 @@ bool FileHandling::save(std::string newPath, StoredData* data)
 		file << "OctaveStack" << std::endl;
 		for (unsigned i = 0; i < data->OctaveStack->size(); i++)
 		{
-			/*
-				Let each line be a track with each row being a set of values
-			*/
+			//Let each line be a track with each row being a set of values
 			for (unsigned y = 0; y < data->OctaveStack->at(i).size(); y++)
 			{
 				for (unsigned z = 0; data->OctaveStack->at(i).at(y).size(); z++)
 				{
-
+					file << data->OctaveStack->at(i).at(y).at(z) << ",";
 				}
+				file << std::endl;
 			}
 		}
+		file << std::endl;
+		file << "Velocities" << std::endl;
+
 		for (unsigned i = 0; i < data->Velocities->size(); i++)
 		{
-
+			for (unsigned y = 0; y < data->Velocities->at(i).size(); y++)
+			{
+				for (unsigned z = 0; data->Velocities->at(i).at(y).size(); z++)
+				{
+					file << data->Velocities->at(i).at(y).at(z) << ",";
+				}
+				file << std::endl;
+			}
 		}
 		for (unsigned i = 0; i < data->NoteLengths->size(); i++)
 		{
@@ -60,14 +96,5 @@ bool FileHandling::save(std::string newPath, StoredData* data)
 
 bool FileHandling::load()
 {
-	return false;
-}
-
-bool FileHandling::writeToFile(std::string structureName, std::ofstream& file)
-{
-	if (structureName == "")
-	{
-		return true;
-	}
 	return false;
 }
