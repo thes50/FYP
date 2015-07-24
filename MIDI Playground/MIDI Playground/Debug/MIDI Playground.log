@@ -1,12 +1,8 @@
-﻿Build started 19/07/2015 01:55:24.
+﻿Build started 23/07/2015 21:49:57.
      1>Project "D:\GitHub\FYP\MIDI Playground\MIDI Playground\MIDI Playground.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\boost_1_57_0 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt Data.h FileHandling.cpp Source.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\boost_1_57_0 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt FileHandling.cpp
          FileHandling.cpp
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         Data.h
-         Source.cpp
        Link:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\FYP\MIDI Playground\Debug\MIDI Playground.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\boost_1_57_0\stage\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\FYP\MIDI Playground\Debug\MIDI Playground.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\FYP\MIDI Playground\Debug\MIDI Playground.lib" /MACHINE:X86 Debug\Analysis.obj
          Debug\Binasc.obj
@@ -26,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.87
+Time Elapsed 00:00:03.35

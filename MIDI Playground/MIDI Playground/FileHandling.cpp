@@ -4,9 +4,16 @@ const std::string FileHandling::path = "saves/";
 
 bool FileHandling::createDirectoryIfNotValid(std::string path) 
 {
-	if (!boost::filesystem::is_directory(boost::filesystem::path(path)))
+	for (int i = 0; i < 5; i++)
 	{
-		boost::filesystem::create_directory(boost::filesystem::path(path));
+		if (!boost::filesystem::is_directory(boost::filesystem::path(path)))
+		{
+			boost::filesystem::create_directory(boost::filesystem::path(path));
+		}
+		else
+		{
+			break;
+		}
 	}
 	return true;
 }
@@ -50,19 +57,19 @@ bool FileHandling::save(DATA* data)
 }
 bool FileHandling::save(std::string newPath, DATA* data)
 {
-	std::string outputFile = newPath;
-	createDirectoryIfNotValid(outputFile);
+	std::string outputFile = newPath+"saves.txt";
+	createDirectoryIfNotValid(newPath);
 	std::ofstream file;
 	file.open(outputFile, std::ios::out);
 	if (file.is_open())
 	{
 		file << "OctaveStack" << std::endl;
-		for (unsigned i = 0; i < data->OctaveStack->size(); i++)
+		for (unsigned i = 0; i < data->OctaveStack->size(); ++i)
 		{
 			//Let each line be a track with each row being a set of values
 			for (unsigned y = 0; y < data->OctaveStack->at(i).size(); y++)
 			{
-				for (unsigned z = 0; data->OctaveStack->at(i).at(y).size(); z++)
+				for (unsigned z = 0; z < data->OctaveStack->at(i).at(y).size(); z++)
 				{
 					file << data->OctaveStack->at(i).at(y).at(z) << ",";
 				}
@@ -76,7 +83,7 @@ bool FileHandling::save(std::string newPath, DATA* data)
 		{
 			for (unsigned y = 0; y < data->Velocities->at(i).size(); y++)
 			{
-				for (unsigned z = 0; data->Velocities->at(i).at(y).size(); z++)
+				for (unsigned z = 0; z < data->Velocities->at(i).at(y).size(); z++)
 				{
 					file << data->Velocities->at(i).at(y).at(z) << ",";
 				}

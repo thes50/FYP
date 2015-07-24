@@ -1,11 +1,13 @@
 #include "MidiFile.h"
 #include "Notes.h"
 
+#include "Autosave.h"
 #include "Data.h"
 #include "FileHandling.h"
 #include <boost\filesystem.hpp>
 #include <numeric>
 #include <cmath>
+#include <thread>
 
 char notes[12] = { 'Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G' };
 int averageVelocity = NULL;
@@ -92,6 +94,7 @@ int main()
 			std::cout << note << std::endl;
 		}
 	}
+
 	FileHandling::save(&data);
 	//Get the average velocity. std::round fixes the standard int rounding error
 	//averageVelocity = std::round(std::accumulate(Velocities->begin(), Velocities->end(), 0) / Velocities->size());
