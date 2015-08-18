@@ -1,13 +1,52 @@
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\vc120.pdb
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\vc120.idb
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\source.obj
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\midifile.obj
-c:\users\matt\documents\visual studio 2013\projects\midi playground\debug\midi playground.pdb
-c:\users\matt\documents\visual studio 2013\projects\midi playground\debug\midi playground.exe
-c:\users\matt\documents\visual studio 2013\projects\midi playground\debug\midi playground.ilk
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\midi playground.tlog\cl.command.1.tlog
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\midi playground.tlog\cl.read.1.tlog
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\midi playground.tlog\cl.write.1.tlog
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\midi playground.tlog\link.command.1.tlog
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\midi playground.tlog\link.read.1.tlog
-c:\users\matt\documents\visual studio 2013\projects\midi playground\midi playground\debug\midi playground.tlog\link.write.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\debug\midi playground.bsc
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\vc120.pdb
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\vc120.idb
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\source.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\options.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\notes.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midimessage.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midifile.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midieventlist.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midievent.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\filehandling.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\data.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\binasc.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\analysis.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\analysis.nativecodeanalysis.xml
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\binasc.nativecodeanalysis.xml
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\data.nativecodeanalysis.xml
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\filehandling.nativecodeanalysis.xml
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midievent.nativecodeanalysis.xml
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\analysis.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\binasc.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\data.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midievent.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midieventlist.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midifile.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midimessage.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\notes.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\options.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\vc140.pdb
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\vc140.idb
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\filehandling.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\source.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\autosave.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\autosave.obj
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\settings.sbr
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\settings.obj
+c:\users\matt\documents\github\fyp\midi playground\debug\midi playground.ilk
+c:\users\matt\documents\github\fyp\midi playground\debug\midi playground.exe
+c:\users\matt\documents\github\fyp\midi playground\debug\midi playground.pdb
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.res
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\bscmake.command.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\bscmake.read.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\bscmake.write.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\cl.command.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\cl.read.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\cl.write.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\link.command.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\link.read.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\link.write.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\rc.command.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\rc.read.1.tlog
+c:\users\matt\documents\github\fyp\midi playground\midi playground\debug\midi playground.tlog\rc.write.1.tlog

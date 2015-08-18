@@ -1,13 +1,19 @@
 #ifndef AUTOSAVE_H
 #define AUTOSAVE_H
 
-class Autosave {
-private:
-	static const bool flag;
+#include "FileHandling.h"
+#include <exception>
+#include <thread>
 
+class Autosave 
+{
+private:
+	static int currentIndex;
 public:
-	static const int index;
-	Autosave();
+	static int index;
+	static bool endThread;
+	static void Auto();
+	static DATA* dataStruct;
 };
 
 #endif
