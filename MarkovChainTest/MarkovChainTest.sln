@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MarkovChainTest", "MarkovChainTest\MarkovChainTest.vcxproj", "{E2259043-A7AE-42C4-A94F-78ABF3B8BB3A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MIDI Playground", "..\MIDI Playground\MIDI Playground\MIDI Playground.vcxproj", "{60E5C881-1502-4862-A8B4-2140289925F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,9 @@ Global
 		{E2259043-A7AE-42C4-A94F-78ABF3B8BB3A}.Debug|Win32.Build.0 = Debug|Win32
 		{E2259043-A7AE-42C4-A94F-78ABF3B8BB3A}.Release|Win32.ActiveCfg = Release|Win32
 		{E2259043-A7AE-42C4-A94F-78ABF3B8BB3A}.Release|Win32.Build.0 = Release|Win32
+		{60E5C881-1502-4862-A8B4-2140289925F0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{60E5C881-1502-4862-A8B4-2140289925F0}.Release|Win32.ActiveCfg = Release|Win32
+		{60E5C881-1502-4862-A8B4-2140289925F0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
