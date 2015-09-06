@@ -4,8 +4,7 @@
 class Settings
 {
 public:
-	static int generation;
-	static int generationMaxLimit;
+	//static int generationMaxLimit;
 };
 
 #endif

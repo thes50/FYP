@@ -42,10 +42,10 @@ bool FileHandling::loadCFG(std::string path, std::string filename)
 				}
 				delete lines;
 
-				if (int pos = contains(parsedLines, "generation") != 0)
+				/*if (int pos = contains(parsedLines, "generation") != 0)
 					Settings::generation = std::stoi(parsedLines.at(pos));
 				if (int pos = contains(parsedLines, "generationMaxLimit") != 0)
-					Settings::generationMaxLimit = std::stoi(parsedLines.at(pos));
+					Settings::generationMaxLimit = std::stoi(parsedLines.at(pos));*/
 				return true;
 			}
 			writeErrorToLog(FILE_HANDLING_ERROR);
@@ -238,7 +238,7 @@ DATA* FileHandling::load(std::string newPath)
 					///////////////////////////////////
 					auto octaveStack = data->OctaveStack;
 					std::string currentLine = "";
-					for (unsigned i = index; i < lines->size() && lines->at(i) != "Velocities"; i++)
+					for (unsigned i = 0; i < lines->size() && lines->at(i) != "Velocities"; i++)
 					{
 						std::istringstream strStream(currentLine);
 						std::string item = "";

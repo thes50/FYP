@@ -42,9 +42,6 @@
     <ClCompile Include="Analysis.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileHandling.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="Data.h">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -52,6 +49,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="Settings.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileHandling.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,13 +80,13 @@
     <ClInclude Include="Analysis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileHandling.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Autosave.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileHandling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

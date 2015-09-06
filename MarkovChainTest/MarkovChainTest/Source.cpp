@@ -7,9 +7,9 @@ typedef std::map<char, int> Value;
 
 double getPercentageChance()
 {
-
+	return 0.0;
 }
-void buildPercentageTable(char )
+void buildPercentageTable()
 {
 
 }
