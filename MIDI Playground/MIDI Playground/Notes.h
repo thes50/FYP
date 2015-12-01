@@ -1,6 +1,13 @@
 #ifndef NOTES_H
 #define NOTES_H
-#include <utility>
+
+struct NoteReturnGroup
+{
+	NoteReturnGroup(bool valid, char newNote, int oct);
+	bool isValid;
+	char note;
+	int octave;
+};
 
 class Notes {
 private:
@@ -19,7 +26,7 @@ private:
 
 
 public:
-	std::pair<bool, int> contains(int noteVal, char noteSet);
+	NoteReturnGroup contains(int noteVal, char noteSet);
 
 };
 

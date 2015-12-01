@@ -804,9 +804,11 @@ void MidiFile::joinTracks(void) {
 
    clear_no_deallocate();
 
-   delete events[0];
-   events.resize(0);
-   events.push_back(joinedTrack);
+   //delete events[0];
+   //delete &events;
+   events.resize(1);
+   events.at(0) = joinedTrack;
+   
    sortTracks();
    if (oldTimeState == TIME_STATE_DELTA) {
       deltaTicks();
@@ -849,7 +851,7 @@ void MidiFile::splitTracks(void) {
    MidiEventList* olddata = events[0];
    events[0] = NULL;
    events.resize(trackCount);
-   for (i=0; i<=trackCount; i++) {
+   for (i=0; i < trackCount; i++) {
       events[i] = new MidiEventList;
    }
 
@@ -1814,10 +1816,8 @@ void MidiFile::buildTimeMap(void) {
    timemap.reserve(allocsize+10);
    timemap.clear();
 
-   _TickTime value;
-
-   int lasttick = 0;
-   int curtick;
+   long long lasttick = 0;
+   long long  curtick  = 0;
    int tickinit = 0;
 
    int i;
@@ -1826,19 +1826,21 @@ void MidiFile::buildTimeMap(void) {
    double secondsPerTick = 60.0 / (defaultTempo * tpq);
 
    double lastsec = 0.0;
-   double cursec;
+   double cursec = 0.0;
 
-   for (i=0; i<getNumEvents(0); i++) {
-      curtick = getEvent(0, i).tick;
-      getEvent(0, i).seconds = cursec;
+   for (i = 0; i < getNumEvents(0); i++) {
+	  MidiEvent &evt = getEvent(0, i);
+	  evt.track;
+      curtick = evt.tick;
+      evt.seconds = cursec;
       if ((curtick > lasttick) || !tickinit) {
          tickinit = 1;
 
-         // calculate the current time in seconds:
+         // calculate the current time in seconds, store in current event
          cursec = lastsec + (curtick - lasttick) * secondsPerTick;
-         getEvent(0, i).seconds = cursec;
-
-         // store the new tick to second mapping
+         evt.seconds = cursec;
+         // store the new tick to second mapping  
+		 _TickTime value;
          value.tick = curtick;
          value.seconds = cursec;
          timemap.push_back(value);
@@ -1847,8 +1849,8 @@ void MidiFile::buildTimeMap(void) {
       }
 
       // update the tempo if needed:
-      if (getEvent(0,i).isTempo()) {
-         secondsPerTick = getEvent(0,i).getTempoSPT(getTicksPerQuarterNote());
+      if (evt.isTempo()) {
+         secondsPerTick = evt.getTempoSPT(getTicksPerQuarterNote());
       }
    }
 

@@ -1,9 +1,4 @@
-#include <map>
-#include <vector>
-#include <string>
-#define root "A"
-
-typedef std::map<char, int> Value;
+#include "MarkovChain.h"
 
 double getPercentageChance()
 {
@@ -18,7 +13,7 @@ void buildNoteCountTable()
 	/*
 	Builds a map of maps in order to collect probability of next note being a specified value.
 	*/
-	std::string notes = "AEFAEGFEFAEFEAGBCBACADCDEFEABAEFAEGFBACFACDEFCFAEFAEGEADCFFEAFEABHACDEFEABDCF";
+	/*std::string notesaksldjalksjd = "AEFAEGFEFAEFEAGBCBACADCDEFEABAEFAEGFBACFACDEFCFAEFAEGEADCFFEAFEABHACDEFEABDCF";
 	std::map<char, std::map<char, int>>* notesTable = new std::map<char, std::map<char, int>>();
 	for (int i = 0; i < notes.length(); i++)
 	{
@@ -43,11 +38,17 @@ void buildNoteCountTable()
 				notesTable->at(notes[i]).at(notes[nextPos])++;
 			}
 		}
-	}
+	}*/
 }
 
 int main()
 {
-	buildNoteCountTable();
-	buildPercentageTable();
+	MarkovChain chain;
+	bool status = chain.createFromMidiFile("moonlight-movement1.mid");
+	if (status)
+	{
+		chain.analyseMidiFile();
+		chain.generateNewMidiFile();
+	}
+	int a = 0;
 }

@@ -178,7 +178,7 @@ void MidiEvent::linkEvent(MidiEvent* mev) {
    if (eventlink != NULL) {
       eventlink->unlinkEvent();
    }
-   unlinkEvent();
+   //unlinkEvent();
 
    mev->eventlink = this;
    eventlink = mev;

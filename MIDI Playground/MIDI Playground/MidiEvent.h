@@ -25,15 +25,15 @@ typedef unsigned long  ulong;
 
 class MidiEvent : public MidiMessage {
    public:
-                 MidiEvent     (void);
-                 MidiEvent     (int command);
-                 MidiEvent     (int command, int param1);
-                 MidiEvent     (int command, int param1, int param2);
-                 MidiEvent     (int aTime, int aTrack, vector<uchar>& message);
-                 MidiEvent     (const MidiMessage& message);
-                 MidiEvent     (const MidiEvent& mfevent);
-
-                ~MidiEvent     ();
+      MidiEvent     (void);
+      MidiEvent     (int command);
+      MidiEvent     (int command, int param1);
+      MidiEvent     (int command, int param1, int param2);
+      MidiEvent     (int aTime, int aTrack, vector<uchar>& message);
+      MidiEvent     (const MidiMessage& message);
+      MidiEvent     (const MidiEvent& mfevent);
+ 
+      ~MidiEvent    ();
 
       MidiEvent& operator=     (MidiEvent& mfevent);
       MidiEvent& operator=     (MidiMessage& message);

@@ -1,3 +1,4 @@
+
 #include "MidiFile.h"
 #include "Notes.h"
 #include "Autosave.h"
@@ -21,8 +22,9 @@ void parseMidiFiles()
 	for (unsigned a = 0; a < dataStructs->Files->size(); a++)
 	{
 		MidiFile file(dataStructs->Files->at(a));
+		file.linkNotePairs();
 		std::vector<std::vector<int>> trackOctavesPerFile, trackVelocitiesPerFile, trackNoteLengthsPerFile;
-		for (int i = 0; i < file.getTrackCount(); i++)
+		/*for (int i = 0; i < file.getTrackCount(); i++)
 		{
 			FileHandling::writeToLog(TRACK_FOUND + std::to_string(i));
 			std::vector<int> trackVelocities, trackOctaves, trackNoteLengths;
@@ -51,7 +53,7 @@ void parseMidiFiles()
 		dataStructs->OctaveStack->push_back(trackOctavesPerFile);
 		dataStructs->Velocities->push_back(trackVelocitiesPerFile);
 		dataStructs->NoteLengths->push_back(trackNoteLengthsPerFile);
-		dataStructs->CountedValues->push_back(countVals);
+		dataStructs->CountedValues->push_back(countVals);*/
 	}
 }
 int main()
