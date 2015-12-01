@@ -145,7 +145,7 @@ bool MarkovChain::analyseMidiFile()
 MidiFile& MarkovChain::generateNewMidiFile()
 {
 	Notes noteClass;
-	MidiFile& newFile = MidiFile("AYYLMAO.mid");
+	MidiFile newFile;
 	newFile.addTrack();
 	newFile.setTicksPerQuarterNote(512);
 
@@ -171,7 +171,7 @@ MidiFile& MarkovChain::generateNewMidiFile()
 		trackLengthMin = trackLength - trackLengthShort;
 	}
 
-	trackLength = (Random::getRandomNumber(trackLengthMin, trackLengtMax) / 2);
+	trackLength = 5;
 	int currTick = 0;
 	Note root("C", 5, 64, 0.0, true);
 
@@ -197,6 +197,7 @@ MidiFile& MarkovChain::generateNewMidiFile()
 			0
 		}));
 	}
-	newFile.write(newFile.getFilename());
+	const std::string newfilename = "AYYLMAO.mid";
+	newFile.write(newfilename);
 	return newFile;
 }
