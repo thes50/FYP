@@ -17,10 +17,13 @@ private:
 	//Each markov node needs to take Note, Octave, Velocity and Duration into account. 
 	//Only way is to have seperate maps for each type and then treat each 
 	std::map<std::string, std::map<std::string, int>> noteCountTable;
+	std::map<std::string, std::map<std::string, int>> octaveCountTable;
 	std::map<int, std::map<int, int>> velocityCountTable; //Rounded to nearest Five
 	int mostPopulatedTrack;
+	NotePair startingPair;
 	MidiFile *file;
-	Note getNextNote(Note root);
+	NotePair getNextNote(Note rootA, Note rootB);
+	void writeNote(MidiFile& newFile, Note newNote, int& currTick, Notes notes);
 
 public:
 	MarkovChain();

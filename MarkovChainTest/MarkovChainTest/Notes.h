@@ -15,8 +15,17 @@ public:
 	std::string cNote;
 	int  octave;
 	int velocity;
-	double duration;
+	int duration;
 	bool isValid = true;
+};
+
+struct NotePair
+{
+public:
+	Note noteA;
+	Note noteB;
+	NotePair(Note a, Note b) { noteA = a; noteB = b; }
+	NotePair() {}
 };
 
 class Notes

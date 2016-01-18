@@ -1,5 +1,11 @@
 #include "MarkovChain.h"
 
+#define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif
+
+
 MarkovChain::MarkovChain()
 {
 	file = nullptr;
@@ -18,18 +24,23 @@ MarkovChain::MarkovChain(MidiFile & midiFile)
 {
 	file = &midiFile;
 }
-#include <math.h>
-Note MarkovChain::getNextNote(Note root)
+
+NotePair MarkovChain::getNextNote(Note rootA, Note rootB)
 {
-	Note newNote;
-	if (noteCountTable.find(root.cNote) == noteCountTable.end())
+	Note returnA;
+	Note returnB;
+	std::string key = rootA.cNote + " " + rootB.cNote;
+
+	//Attempt to find next note.
+	if (noteCountTable.find(key) == noteCountTable.end())
 	{
-		newNote.cNote = "Err";
-		newNote.isValid = false;
-		return newNote;
+		returnA.cNote = "Err";
+		returnA.isValid = false;
+		return NotePair(returnA, Note());
 	}
 	
-	std::map<std::string, int> submap = noteCountTable.at(root.cNote);
+	//Create local copy to update
+	std::map<std::string, int> submap = noteCountTable.at(key);
 	int total = 0;
 	for (auto count : submap)
 	{
@@ -38,10 +49,13 @@ Note MarkovChain::getNextNote(Note root)
 
 	for (auto count : submap)
 	{
+		//Force floating point division logic to avoid truncation.
+		//Convert to percentage
 		double newAmount = (double)count.second / (double)total;
 		submap.at(count.first) = std::round(newAmount * 100);
 	}
 
+	//Has 100 attempts to generate a valid next node
 	bool passed = false;
 	for (int i = 0; i < 100 && !passed; i++)
 	{
@@ -51,16 +65,27 @@ Note MarkovChain::getNextNote(Note root)
 			int chance = Random::getRandomNumber(0, 100);
 			if (chance < count.second)
 			{
-				newNote.cNote = count.first;
-				newNote.octave = Random::getRandomNumber(5, 5); //Replace with actual markov logic
-				newNote.isValid = true;
-				newNote.velocity = 60;
+				//Split into array
+				std::string returnAVal = count.first.substr(0, count.first.find(' '));
+				std::string returnBVal = count.first.substr(count.first.find(' ') + 1, count.first.size());
+
+				returnA.cNote = returnAVal;
+				returnA.octave = Random::getRandomNumber(5, 5); //Replace with actual markov logic
+				returnA.isValid = true;
+				returnA.velocity = 60;
+				returnA.duration = file->getTicksPerQuarterNote();
+
+				returnB.cNote = returnBVal;
+				returnB.octave = Random::getRandomNumber(5, 5); //Replace with actual markov logic
+				returnB.isValid = true;
+				returnB.velocity = 60;
+				returnB.duration = file->getTicksPerQuarterNote();
 				passed = true;
 				break;
 			}
 		}
 	}
-	return newNote;
+	return NotePair(returnA, returnB);
 }
 
 bool MarkovChain::createFromMidiFile(const std::string filepath)
@@ -97,47 +122,59 @@ bool MarkovChain::analyseMidiFile()
 		}
 	}
 
-	//Build map table
+	//Initial scan notes into single structure.
+	std::vector<MidiEvent> noteList;
 	for (int i = 0; i < file[0][mostPopulatedTrack].getSize(); i++)
 	{
-		if (file[0][mostPopulatedTrack][i].isLinked())
+		if (noteClass.getNoteType(file[0][mostPopulatedTrack][i]).isValid)
+		{
+			noteList.push_back(file[0][mostPopulatedTrack][i]);
+		}
+	}
+
+	//Build map table
+	for (int i = 0; i < noteList.size(); i++)
+	{
+		//Check it isn't the end of the list.
+		if (i + 2 >= noteList.size())
+		{
+			break;
+		}
+
+		if (noteList.at(i).isLinked())
 		{
 			//Add to new Map for later usage. Potentially implement a Positive/Negative system rather than a map of values.
 			//Other idea is to take an average of all of the durations and then use this rounded to nearest note.
-			int durationInTicks = file[0][mostPopulatedTrack][i].getTickDuration();
-			double durationInSeconds = file[0][mostPopulatedTrack][i].getDurationInSeconds();
+			int durationInTicks = noteList.at(i).getTickDuration();
+
+			#ifdef DEBUG
+			std::cout << durationInTicks << std::endl;
+			#endif
 		}
 
-		Note note1 = noteClass.getNoteType(file[0][mostPopulatedTrack][i]);
-		if (noteCountTable.find(note1.cNote) == noteCountTable.end() && note1.isValid)
-		{
-			//No key value found for note, insert new key.
-			noteCountTable.insert(std::make_pair(note1.cNote, std::map<std::string, int>()));
-		}
-		//Check up to thirty events ahead for the next valid note
-		for (int a = 1; a <= 30; a++)
-		{
-			if ((i + a) < file[0][mostPopulatedTrack].size() && note1.isValid)
-			{
-				Note nextNote = noteClass.getNoteType(file[0][mostPopulatedTrack][i + a]);
-				if (!nextNote.isValid)
-				{
-					continue;
-				}
+		Note grandChildNote = noteClass.getNoteType(noteList.at(i + 2));
+		Note childNote = noteClass.getNoteType(noteList.at(i + 1));
+		Note thisNote = noteClass.getNoteType(noteList.at(i));
+		std::string grandChildCombined = grandChildNote.cNote + " " + childNote.cNote;
+		std::string childThisCombined = childNote.cNote + " " + thisNote.cNote;
 
-				if (noteCountTable.at(note1.cNote).find(nextNote.cNote) == noteCountTable.at(note1.cNote).end())
-				{
-					//Key not found, insert new
-					noteCountTable.at(note1.cNote).insert(std::pair<std::string, int>(nextNote.cNote, 1));
-				}
-				else
-				{
-					//Key found, increment note occurrene count
-					noteCountTable.at(note1.cNote).at(nextNote.cNote)++;
-				}
-				break;
-			}
+		//Inserts current Note + Child pair if not found.
+		if (noteCountTable.find(childThisCombined) == noteCountTable.end())
+		{
+			noteCountTable.insert(std::make_pair(childThisCombined, std::map<std::string, int>()));
 		}
+
+		//Inserts Next Note + Node After
+		if (noteCountTable.at(childThisCombined).find(grandChildCombined) == noteCountTable.at(childThisCombined).end())
+		{
+			noteCountTable.at(childThisCombined).insert(std::pair<std::string, int>(grandChildCombined, 1));
+		}
+		else
+		{
+			//Key found, increment note occurrene count
+			noteCountTable.at(childThisCombined).at(grandChildCombined)++;
+		}
+		startingPair = NotePair(thisNote, childNote);
 	}
 	return true;
 }
@@ -171,33 +208,40 @@ MidiFile& MarkovChain::generateNewMidiFile()
 		trackLengthMin = trackLength - trackLengthShort;
 	}
 
-	trackLength = 5;
+	//Build new track.
 	int currTick = 0;
-	Note root("C", 5, 64, 0.0, true);
-
+	NotePair rootPair(startingPair.noteA, startingPair.noteB);
 	for (int i = 0; i < trackLength; i++)
 	{
-		uchar note = (uchar)noteClass.getNoteMidiValue(root = getNextNote(root));
-		//Write the start note.
-		newFile.addEvent(0, currTick, std::vector<uchar>
-		({
-			NOTE_ON, 
-			note,
-			64 
-		}));
-
-		//Increment tick value.
-		currTick += newFile.getTicksPerQuarterNote();
-
-		//Write the ending note
-		newFile.addEvent(0, currTick, std::vector<uchar>
-		({
-			NOTE_OFF,
-			note,
-			0
-		}));
+		rootPair = getNextNote(rootPair.noteA, rootPair.noteB);
+		writeNote(newFile, rootPair.noteA, currTick, noteClass);
+		writeNote(newFile, rootPair.noteB, currTick, noteClass);
 	}
 	const std::string newfilename = "AYYLMAO.mid";
 	newFile.write(newfilename);
 	return newFile;
+}
+
+void MarkovChain::writeNote(MidiFile & newFile, Note newNote, int& currTick, Notes noteClass)
+{
+	uchar note = (uchar)noteClass.getNoteMidiValue(newNote);
+
+	//Write the start note.
+	newFile.addEvent(0, currTick, std::vector<uchar>
+	({
+		NOTE_ON,
+		note,
+		64
+	}));
+
+	//Increment tick value.
+	currTick += newNote.duration;
+
+	//Write the ending note
+	newFile.addEvent(0, currTick, std::vector<uchar>
+	({
+		NOTE_OFF,
+		note,
+			0
+	}));
 }
