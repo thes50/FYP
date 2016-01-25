@@ -87,6 +87,7 @@
     <ClCompile Include="..\..\MIDI Playground\MIDI Playground\MidiMessage.cpp" />
     <ClCompile Include="FileHandling.cpp" />
     <ClCompile Include="MarkovChain.cpp" />
+    <ClCompile Include="Maths.cpp" />
     <ClCompile Include="Notes.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Source.cpp" />

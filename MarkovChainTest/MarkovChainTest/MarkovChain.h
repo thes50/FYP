@@ -5,10 +5,12 @@
 #include "Random.h"
 #include "Notes.h"
 #include "FileHandling.h"
+#include "Maths.cpp"
 
 #include <map>
 #include <vector>
 #include <string>
+#include <numeric>
 #include <algorithm>
 
 class MarkovChain
@@ -23,7 +25,9 @@ private:
 	NotePair startingPair;
 	MidiFile *file;
 	NotePair getNextNote(Note rootA, Note rootB);
-	void writeNote(MidiFile& newFile, Note newNote, int& currTick, Notes notes);
+	void writeNote(MidiFile& newFile, Note newNote, int& currTick, Notes notes); 
+	template <class T, class P1, class P2> T countInSubmap(T a);
+	bool isNoteFinishedConstruction(bool noteNamed, bool velocity);
 
 public:
 	MarkovChain();
@@ -34,5 +38,23 @@ public:
 	bool analyseMidiFile();
 	MidiFile& generateNewMidiFile();
 };
+
+template<class T, class P1, class P2>
+inline T MarkovChain::countInSubmap(T map)
+{
+	int total = 0;
+	std::map<P1, P2> newT;
+	for (std::pair<P1, P2> pair : map)
+	{
+		total += pair.second;
+	}
+	for (std::pair<P1, P2> pair : map)
+	{
+		double newAmount = (double)pair.second / (double)total;
+		pair.second = std::round(newAmount * 100);
+		newT.insert(pair);
+	}
+	return map;
+}
 
 #endif

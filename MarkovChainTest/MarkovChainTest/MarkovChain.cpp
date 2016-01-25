@@ -25,6 +25,11 @@ MarkovChain::MarkovChain(MidiFile & midiFile)
 	file = &midiFile;
 }
 
+bool MarkovChain::isNoteFinishedConstruction(bool noteNamed, bool velocity)
+{
+	return (noteNamed && velocity);
+}
+
 NotePair MarkovChain::getNextNote(Note rootA, Note rootB)
 {
 	Note returnA;
@@ -41,48 +46,53 @@ NotePair MarkovChain::getNextNote(Note rootA, Note rootB)
 	
 	//Create local copy to update
 	std::map<std::string, int> submap = noteCountTable.at(key);
-	int total = 0;
-	for (auto count : submap)
-	{
-		total += count.second;
-	}
+	int vel = Maths::round(rootA.velocity, 5);
+	std::map<int, int> velSubmap = velocityCountTable.at(vel);
 
-	for (auto count : submap)
-	{
-		//Force floating point division logic to avoid truncation.
-		//Convert to percentage
-		double newAmount = (double)count.second / (double)total;
-		submap.at(count.first) = std::round(newAmount * 100);
-	}
+	int total = 0;
+	submap = countInSubmap<std::map<std::string, int>, std::string, int> (submap);
+	velSubmap = countInSubmap<std::map<int,int>, int,int>(velSubmap);
 
 	//Has 100 attempts to generate a valid next node
-	bool passed = false;
-	for (int i = 0; i < 100 && !passed; i++)
+	bool passedNote = false;
+	bool passedVel = false;
+	for (int i = 0; i < 100; i++)
 	{
 		for (auto count : submap)
 		{
 			//Get %chance of success, if its less than the conditional value in submap then return that as a new note.
 			int chance = Random::getRandomNumber(0, 100);
-			if (chance < count.second)
+			if (!passedNote && chance < count.second)
 			{
 				//Split into array
 				std::string returnAVal = count.first.substr(0, count.first.find(' '));
 				std::string returnBVal = count.first.substr(count.first.find(' ') + 1, count.first.size());
 
 				returnA.cNote = returnAVal;
-				returnA.octave = Random::getRandomNumber(5, 5); //Replace with actual markov logic
-				returnA.isValid = true;
-				returnA.velocity = 60;
+				returnA.octave = Random::getRandomNumber(5, 5);
 				returnA.duration = file->getTicksPerQuarterNote();
 
 				returnB.cNote = returnBVal;
-				returnB.octave = Random::getRandomNumber(5, 5); //Replace with actual markov logic
-				returnB.isValid = true;
-				returnB.velocity = 60;
+				returnB.octave = Random::getRandomNumber(5, 5);
 				returnB.duration = file->getTicksPerQuarterNote();
-				passed = true;
+				passedNote = true;
 				break;
 			}
+		}
+		for (auto count : velSubmap)
+		{
+			int chance = Random::getRandomNumber(0, 100);
+			if (!passedVel && chance < count.second)
+			{
+				returnA.velocity = count.first;
+				returnB.velocity = count.first;
+			}
+		}
+		if (isNoteFinishedConstruction(passedNote, passedVel))
+		{
+			returnA.isValid = true;
+			returnB.isValid = true;
+			break;
 		}
 	}
 	return NotePair(returnA, returnB);
@@ -163,6 +173,11 @@ bool MarkovChain::analyseMidiFile()
 		{
 			noteCountTable.insert(std::make_pair(childThisCombined, std::map<std::string, int>()));
 		}
+		int vel = 0;
+		if (velocityCountTable.find(vel = Maths::round(Maths::average(2, childNote.velocity, thisNote.velocity), 5)) == velocityCountTable.end())
+		{
+			velocityCountTable.insert(std::make_pair(vel, std::map<int, int>()));
+		}
 
 		//Inserts Next Note + Node After
 		if (noteCountTable.at(childThisCombined).find(grandChildCombined) == noteCountTable.at(childThisCombined).end())
@@ -171,9 +186,19 @@ bool MarkovChain::analyseMidiFile()
 		}
 		else
 		{
-			//Key found, increment note occurrene count
+			//Key found, increment note occurrence count
 			noteCountTable.at(childThisCombined).at(grandChildCombined)++;
 		}
+		int velGrand = 0;
+		if (velocityCountTable.at(vel).find(velGrand = Maths::round(Maths::average(2, grandChildNote.velocity, childNote.velocity), 5)) == velocityCountTable.at(vel).end())
+		{
+			velocityCountTable.at(vel).insert(std::pair<int, int>(velGrand, 1));
+		}
+		else
+		{
+			velocityCountTable.at(vel).at(velGrand)++;
+		}
+
 		startingPair = NotePair(thisNote, childNote);
 	}
 	return true;
@@ -231,7 +256,7 @@ void MarkovChain::writeNote(MidiFile & newFile, Note newNote, int& currTick, Not
 	({
 		NOTE_ON,
 		note,
-		64
+		(uchar)newNote.velocity
 	}));
 
 	//Increment tick value.
