@@ -1,3 +1,12 @@
+# Visual Studio
+*.opensdf
+*.sln
+*.sdf
+*.suo
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -13,6 +22,7 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+Debug
 
 # Windows shortcuts
 *.lnk
