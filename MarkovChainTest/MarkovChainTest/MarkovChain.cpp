@@ -186,31 +186,18 @@ bool MarkovChain::analyseMidiFile()
 		if (noteClass.getNoteType(&file[0][mostPopulatedTrack][i]).isValid)
 		{
 			noteList.push_back(i);
-			if (previousNoteEnd != file[0][mostPopulatedTrack][i].tick)
+			long currTick = file[0][mostPopulatedTrack][i].tick;
+			if (previousNoteEnd != currTick)
 			{
-				int difference = Maths::round((previousNoteEnd - file[0][mostPopulatedTrack][i].tick), (file->getTicksPerQuarterNote() / 4));
-				if (pauseCounter.find(difference) == pauseCounter.end())
+				int difference = Maths::round((currTick - previousNoteEnd), (file->getTicksPerQuarterNote() / 4));
+				if (isWithinSuitableRange(difference))
 				{
-					pauseCounter.insert(std::pair<int, int>(difference, 1));
-				}
-				else
-				{
-					pauseCounter.at(difference)++;
+					pauseCounter.addPause(difference);
 				}
 			}
+			previousNoteEnd = currTick;
 		}
 	}
-
-	std::map<int, int> localPauseCounter;
-	for (auto val : pauseCounter)
-	{
-		//Check is valid note duration, quantise as necessary. Check within acceptable range (qrt length/4...4*qrt length)
-		if (val.first % (file->getTicksPerQuarterNote() / 4) == 0 && val.first > 0 && val.first < file->getTicksPerQuarterNote() * 4)
-		{
-			localPauseCounter.insert(std::pair<int,int>(val.first, val.second));
-		}
-	}
-	pauseCounter = localPauseCounter;
 
 	//Build map table
 	for (int i = 2; i < noteList.size(); i++)
@@ -329,7 +316,7 @@ MidiFile& MarkovChain::generateNewMidiFile()
 	}
 
 	//Build new track.
-	int currTick = 0;
+	long currTick = 0;
 	NotePair rootPair(startingPair.noteA, startingPair.noteB);
 	for (int i = 0; i < trackLength; i++)
 	{
@@ -339,13 +326,25 @@ MidiFile& MarkovChain::generateNewMidiFile()
 			rootPair = startingPair;
 		}
 		writeNote(newFile, rootPair.noteA, currTick, noteClass);
+		
+		//10% chance
+		int difference = Random::getRandomNumber(0, 100);
+		if (difference < 10)
+		{
+			writePause(currTick, Maths::round(pauseCounter.calculate(), (file->getTicksPerQuarterNote() / 4)));
+		}
 	}
 	const std::string newfilename = "fileout.mid";
 	newFile.write(newfilename);
 	return newFile;
 }
 
-void MarkovChain::writeNote(MidiFile & newFile, Note newNote, int& currTick, Notes noteClass)
+void MarkovChain::writePause(long& tick, long length)
+{
+	tick += length;
+}
+
+void MarkovChain::writeNote(MidiFile & newFile, Note newNote, long& currTick, Notes noteClass)
 {
 	uchar note = (uchar)noteClass.getNoteMidiValue(newNote);
 
@@ -365,6 +364,6 @@ void MarkovChain::writeNote(MidiFile & newFile, Note newNote, int& currTick, Not
 	({
 		NOTE_OFF,
 		note,
-			0
+		0
 	}));
 }

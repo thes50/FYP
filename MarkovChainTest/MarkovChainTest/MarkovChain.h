@@ -6,6 +6,7 @@
 #include "Notes.h"
 #include "FileHandling.h"
 #include "Maths.cpp"
+#include "PauseCounter.h"
 
 #include <map>
 #include <vector>
@@ -25,13 +26,14 @@ private:
 	std::map<intPair, std::map<intPair, int>> octaveCountTable;
 	std::map<intPair, std::map<intPair, int>> velocityCountTable; //Rounded to nearest Five
 	std::map<intPair, std::map<intPair, int>> durationCountTable;
-	std::map<int, int> pauseCounter;
+	PauseCounter pauseCounter;
 
 	int mostPopulatedTrack;
 	NotePair startingPair;
 	MidiFile *file;
 	NotePair getNextNote(Note rootA, Note rootB);
-	void writeNote(MidiFile& newFile, Note newNote, int& currTick, Notes notes); 
+	void writeNote(MidiFile& newFile, Note newNote, long& currTick, Notes notes); 
+	void writePause(long& tick, long length);
 	template <class T, class P1, class P2> T countInSubmap(T a);
 	bool isNoteFinishedConstruction(bool noteNamed, bool velocity, bool octave, bool duration);
 	bool isWithinSuitableRange(long value);
