@@ -30,14 +30,19 @@ bool MarkovChain::isNoteFinishedConstruction(bool noteNamed, bool velocity, bool
 	return (noteNamed && velocity && octave && duration);
 }
 
-NotePair MarkovChain::getNextNote(Note rootA, Note rootB)
+NotePair MarkovChain::getNextNote(Note rootA, Note rootB, int index)
 {
 	Note returnA;
 	Note returnB;
 	std::string key = rootA.cNote + " " + rootB.cNote;
+	
+	auto noteTable = noteCountTable.at(index);
+	auto veloTable = velocityCountTable.at(index);
+	auto octoTable = octaveCountTable.at(index);
+	auto duraTable = durationCountTable.at(index);
 
 	//Attempt to find next note.
-	if (noteCountTable.find(key) == noteCountTable.end())
+	if (noteTable.find(key) == noteTable.end())
 	{
 		returnA.cNote = "Err";
 		returnA.isValid = false;
@@ -46,26 +51,26 @@ NotePair MarkovChain::getNextNote(Note rootA, Note rootB)
 	
 	//Create local copy to update
 	std::map<intPair, int> durSubmap;
-	std::map<std::string, int> submap = noteCountTable.at(key);
+	std::map<std::string, int> submap = noteTable.at(key);
 
 	int velA = Maths::round(rootA.velocity, 5);
 	int velB = Maths::round(rootB.velocity, 5);
-	if (velocityCountTable.find(intPair(velA, velB)) == velocityCountTable.end())
+	if (veloTable.find(intPair(velA, velB)) == veloTable.end())
 		return NotePair(Note(), Note());
-	std::map<intPair, int> velSubmap = velocityCountTable.at(intPair(velA, velB));
+	std::map<intPair, int> velSubmap = veloTable.at(intPair(velA, velB));
 
-	if(octaveCountTable.find(intPair(rootA.octave,rootB.octave)) == octaveCountTable.end())
+	if(octoTable.find(intPair(rootA.octave,rootB.octave)) == octoTable.end())
 		return NotePair(Note(), Note());
-	std::map<intPair, int> octSubmap = octaveCountTable.at(intPair(rootA.octave, rootB.octave));
+	std::map<intPair, int> octSubmap = octoTable.at(intPair(rootA.octave, rootB.octave));
 
 	intPair durKey((int)Maths::round(rootA.duration, (file->getTicksPerQuarterNote() / 4)), (int)Maths::round(rootB.duration, (file->getTicksPerQuarterNote() / 4)));
-	if (durationCountTable.find(intPair()) == durationCountTable.end())
+	if (duraTable.find(intPair()) == duraTable.end())
 	{
-		durSubmap = durationCountTable.begin()->second;
+		durSubmap = duraTable.begin()->second;
 	}
 	else
 	{
-		durSubmap = durationCountTable.at(durKey);
+		durSubmap = duraTable.at(durKey);
 	}
 
 	int total = 0;
@@ -198,90 +203,114 @@ bool MarkovChain::analyseMidiFile()
 			previousNoteEnd = currTick;
 		}
 	}
+	
+	int size = noteList.size() / parsingNumber;
+	std::vector<std::vector<int>> wrappingIndexContainer;
 
-	//Build map table
-	for (int i = 2; i < noteList.size(); i++)
+	for (int i = 1; i < (parsingNumber+1); i++)
 	{
-		auto& evt = file[0][mostPopulatedTrack][noteList.at(i)];
-		auto& prevEvt = file[0][mostPopulatedTrack][noteList.at(i - 1)];
-		auto& twoPrevEvt = file[0][mostPopulatedTrack][noteList.at(i - 2)];
-		//Round to length of 1/8th note.
-		long duration = Maths::round(evt.getTickDuration(), (file->getTicksPerQuarterNote() / 2));
-		long prevDuration = Maths::round(prevEvt.getTickDuration(), file->getTicksPerQuarterNote() / 2);
-		long twoPrevDuration = Maths::round(twoPrevEvt.getTickDuration(), file->getTicksPerQuarterNote() / 2);
-		Note grandChildNote = noteClass.getNoteType(&twoPrevEvt);
-		Note childNote = noteClass.getNoteType(&prevEvt);
-		Note thisNote = noteClass.getNoteType(&evt);
-		std::string grandChildCombined = grandChildNote.cNote + " " + childNote.cNote;
-		std::string childThisCombined = childNote.cNote + " " + thisNote.cNote;
-		intPair durPair(prevDuration, duration);
-		intPair durOldPair(twoPrevDuration, prevDuration);
-		intPair velPair(Maths::round(childNote.velocity, 5), Maths::round(thisNote.velocity, 5));
-		intPair velOldPair(Maths::round(grandChildNote.velocity, 5), Maths::round(childNote.velocity, 5));
-		intPair octPair(noteClass.getOctave(childNote, noteClass.getNoteMidiValue(childNote)),
-			noteClass.getOctave(thisNote, noteClass.getNoteMidiValue(thisNote)));
-		intPair octOldPair(noteClass.getOctave(grandChildNote, noteClass.getNoteMidiValue(grandChildNote)),
-			noteClass.getOctave(childNote, noteClass.getNoteMidiValue(childNote)));
+		auto it1 = std::next(noteList.begin(), (i - 1) * size);
+		auto it2 = std::next(noteList.begin(), size * i);
+		wrappingIndexContainer.push_back(std::vector<int>(it1,it2));
+	}
+	//wrappingIndexContainer.push_back(std::vector<int>(noteList.begin(), noteList.end()));
 
-		if (isWithinSuitableRange(duration) && isWithinSuitableRange(prevDuration) && isWithinSuitableRange(twoPrevDuration))
+
+	for (int ind = 0; ind < parsingNumber; ind++)
+	{
+		auto container = wrappingIndexContainer.at(ind);
+
+		for (int i = 2; i < container.size(); i++)
 		{
-			if (durationCountTable.find(durPair) == durationCountTable.end())
+			auto& evt = file[0][mostPopulatedTrack][container.at(i)];
+			auto& prevEvt = file[0][mostPopulatedTrack][container.at(i - 1)];
+			auto& twoPrevEvt = file[0][mostPopulatedTrack][container.at(i - 2)];
+			//Round to length of 1/8th note.
+			long duration = Maths::round(evt.getTickDuration(), (file->getTicksPerQuarterNote() / 2));
+			long prevDuration = Maths::round(prevEvt.getTickDuration(), file->getTicksPerQuarterNote() / 2);
+			long twoPrevDuration = Maths::round(twoPrevEvt.getTickDuration(), file->getTicksPerQuarterNote() / 2);
+			Note grandChildNote = noteClass.getNoteType(&twoPrevEvt);
+			Note childNote = noteClass.getNoteType(&prevEvt);
+			Note thisNote = noteClass.getNoteType(&evt);
+			std::string grandChildCombined = grandChildNote.cNote + " " + childNote.cNote;
+			std::string childThisCombined = childNote.cNote + " " + thisNote.cNote;
+			intPair durPair(prevDuration, duration);
+			intPair durOldPair(twoPrevDuration, prevDuration);
+			intPair velPair(Maths::round(childNote.velocity, 5), Maths::round(thisNote.velocity, 5));
+			intPair velOldPair(Maths::round(grandChildNote.velocity, 5), Maths::round(childNote.velocity, 5));
+			intPair octPair(noteClass.getOctave(childNote, noteClass.getNoteMidiValue(childNote)),
+				noteClass.getOctave(thisNote, noteClass.getNoteMidiValue(thisNote)));
+			intPair octOldPair(noteClass.getOctave(grandChildNote, noteClass.getNoteMidiValue(grandChildNote)),
+				noteClass.getOctave(childNote, noteClass.getNoteMidiValue(childNote)));
+
+			if (noteCountTable.size() <= ind)
 			{
-				durationCountTable.insert(std::make_pair(durPair, std::map<intPair, int>()));
+				noteCountTable.push_back(noteTable());
+				durationCountTable.push_back(intTable());
+				octaveCountTable.push_back(intTable());
+				velocityCountTable.push_back(intTable());
 			}
-			if (durationCountTable.at(durPair).find(durOldPair) == durationCountTable.at(durPair).end())
+
+			if (isWithinSuitableRange(duration) && isWithinSuitableRange(prevDuration) && isWithinSuitableRange(twoPrevDuration))
 			{
-				durationCountTable.at(durPair).insert(std::pair<intPair, int>(durOldPair, 1));
+				if (durationCountTable.at(ind).find(durPair) == durationCountTable.at(ind).end())
+				{
+					durationCountTable.at(ind).insert(std::make_pair(durPair, std::map<intPair, int>()));
+				}
+				if (durationCountTable.at(ind).at(durPair).find(durOldPair) == durationCountTable.at(ind).at(durPair).end())
+				{
+					durationCountTable.at(ind).at(durPair).insert(std::pair<intPair, int>(durOldPair, 1));
+				}
+				else
+				{
+					durationCountTable.at(ind).at(durPair).find(durOldPair)++;
+				}
+			}
+
+			//Inserts current Note + Child pair if not found.
+			if (noteCountTable.at(ind).find(childThisCombined) == noteCountTable.at(ind).end())
+			{
+				noteCountTable.at(ind).insert(std::make_pair(childThisCombined, std::map<std::string, int>()));
+			}
+			if (noteCountTable.at(ind).at(childThisCombined).find(grandChildCombined) == noteCountTable.at(ind).at(childThisCombined).end())
+			{
+				noteCountTable.at(ind).at(childThisCombined).insert(std::pair<std::string, int>(grandChildCombined, 1));
 			}
 			else
 			{
-				durationCountTable.at(durPair).find(durOldPair)++;
+				//Key found, increment note occurrence count
+				noteCountTable.at(ind).at(childThisCombined).at(grandChildCombined)++;
 			}
-		}
 
-		//Inserts current Note + Child pair if not found.
-		if (noteCountTable.find(childThisCombined) == noteCountTable.end())
-		{
-			noteCountTable.insert(std::make_pair(childThisCombined, std::map<std::string, int>()));
-		}
-		if (noteCountTable.at(childThisCombined).find(grandChildCombined) == noteCountTable.at(childThisCombined).end())
-		{
-			noteCountTable.at(childThisCombined).insert(std::pair<std::string, int>(grandChildCombined, 1));
-		}
-		else
-		{
-			//Key found, increment note occurrence count
-			noteCountTable.at(childThisCombined).at(grandChildCombined)++;
-		}
+			if (velocityCountTable.at(ind).find(velPair) == velocityCountTable.at(ind).end())
+			{
+				velocityCountTable.at(ind).insert(std::make_pair(velPair, std::map<intPair, int>()));
+			}
+			if (velocityCountTable.at(ind).at(velPair).find(velOldPair) == velocityCountTable.at(ind).at(velPair).end())
+			{
+				velocityCountTable.at(ind).at(velPair).insert(std::pair<intPair, int>(velOldPair, 1));
+			}
+			else
+			{
+				velocityCountTable.at(ind).at(velPair).at(velOldPair)++;
+			}
 
-		if (velocityCountTable.find(velPair) == velocityCountTable.end())
-		{
-			velocityCountTable.insert(std::make_pair(velPair, std::map<intPair, int>()));
-		}
-		if (velocityCountTable.at(velPair).find(velOldPair) == velocityCountTable.at(velPair).end())
-		{
-			velocityCountTable.at(velPair).insert(std::pair<intPair, int>(velOldPair, 1));
-		}
-		else
-		{
-			velocityCountTable.at(velPair).at(velOldPair)++;
-		}
+			if (octaveCountTable.at(ind).find(octPair) == octaveCountTable.at(ind).end())
+			{
+				octaveCountTable.at(ind).insert(std::make_pair(octPair, std::map<intPair, int>()));
+			}
 
-		if (octaveCountTable.find(octPair) == octaveCountTable.end())
-		{
-			octaveCountTable.insert(std::make_pair(octPair, std::map<intPair, int>()));
-		}
+			if (octaveCountTable.at(ind).at(octPair).find(octOldPair) == octaveCountTable.at(ind).at(octPair).end())
+			{
+				octaveCountTable.at(ind).at(octPair).insert(std::pair<intPair, int>(octOldPair, 1));
+			}
+			else
+			{
+				octaveCountTable.at(ind).at(octPair).at(octOldPair)++;
+			}
 
-		if (octaveCountTable.at(octPair).find(octOldPair) == octaveCountTable.at(octPair).end())
-		{
-			octaveCountTable.at(octPair).insert(std::pair<intPair, int>(octOldPair, 1));
+			startingPair = NotePair(thisNote, childNote);
 		}
-		else
-		{
-			octaveCountTable.at(octPair).at(octOldPair)++;
-		}
-
-		startingPair = NotePair(thisNote, childNote);
 	}
 	return true;
 }
@@ -317,23 +346,29 @@ MidiFile& MarkovChain::generateNewMidiFile()
 
 	//Build new track.
 	long currTick = 0;
+	int trackLengthIndex = trackLength / parsingNumber;
 	NotePair rootPair(startingPair.noteA, startingPair.noteB);
-	for (int i = 0; i < trackLength; i++)
+
+	for (int a = 0; a < parsingNumber; a++)
 	{
-		rootPair = getNextNote(rootPair.noteA, rootPair.noteB);
-		if (rootPair.noteA.cNote == "Err" || rootPair.noteB.cNote == "Err")
+		for (int i = 0; i < trackLengthIndex; i++)
 		{
-			rootPair = startingPair;
-		}
-		writeNote(newFile, rootPair.noteA, currTick, noteClass);
+			rootPair = getNextNote(rootPair.noteA, rootPair.noteB, a);
+			if (rootPair.noteA.cNote == "Err" || rootPair.noteB.cNote == "Err")
+			{
+				rootPair = startingPair;
+			}
+			writeNote(newFile, rootPair.noteA, currTick, noteClass);
 		
-		//10% chance
-		int difference = Random::getRandomNumber(0, 100);
-		if (difference < 10)
-		{
-			writePause(currTick, Maths::round(pauseCounter.calculate(), (file->getTicksPerQuarterNote() / 4)));
+			//10% chance
+			int difference = Random::getRandomNumber(0, 100);
+			if (difference < 10)
+			{
+				writePause(currTick, Maths::round(pauseCounter.calculate(), (file->getTicksPerQuarterNote() / 4)));
+			}
 		}
 	}
+
 	const std::string newfilename = "fileout.mid";
 	newFile.write(newfilename);
 	return newFile;
