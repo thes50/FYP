@@ -25,7 +25,7 @@ public:
 		return (sum / count);
 	}
 
-	static int round(unsigned value, unsigned roundTo)
+	static int round(unsigned value, long roundTo)
 	{
 		//Round param1 to closest Param2
 		return ((value + roundTo / 2) / roundTo) * roundTo;

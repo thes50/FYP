@@ -1,0 +1,50 @@
+body {
+	background-color:#f2f2f2;
+}
+
+.main{
+	background-color:#ffffff;
+	border:1px solid black;
+	margin:0 auto;
+	padding:8px;	
+}
+
+.button {
+	width:200px;
+	height:75px;
+	padding:8px;
+	text-align:center;
+	border:1px solid black;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	background-color: #f2f2f2;
+	color:#000000;
+}
+
+.button:hover{
+	box-shadow: 30px;
+	background-color:#ffffff;
+}
+
+h1, h2, h3, h4, h5, h6, p, b, i {
+	font-family: 'Lato', Verdana, Arial, serif;
+	font-style: justified;
+}
+
+@media screen and (min-width:1200px){
+	.main {
+		width:60%;
+	}
+}
+
+@media screen and (min-width:700px) and (max-width: 1200px) {
+	.main {
+		width:70%;
+	}
+}
+@media screen and (max-width:700px){
+	.main{
+		width:95%;
+	}
+}
