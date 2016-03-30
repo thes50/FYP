@@ -37,6 +37,12 @@ void MarkovChain::setForceContinueFlag(bool state)
 	forceContinueThroughError = state;
 }
 
+void MarkovChain::setOutputFilename(const std::string filename)
+{
+	outputFilename = filename;
+	cleanOutputFilename();
+}
+
 int MarkovChain::getBreakdownResolution()
 {
 	return parsingNumber;
@@ -255,6 +261,8 @@ bool MarkovChain::isWithinSuitableRange(long value)
 
 bool MarkovChain::doesGranularityNeedSequenceChecking()
 {
+	/* TODO: Implement (number / note total) check instead */
+	//If greater than five return true, meaning the tables should be scanned for potential looping sequences
 	return (parsingNumber > 5);
 }
 
@@ -295,6 +303,11 @@ bool MarkovChain::analyseMidiFile()
 				}
 			}
 			previousNoteEnd = currTick;
+		}
+		else if (file[0][mostPopulatedTrack][i].isTempo())
+		{
+			//Add support for shifts in tempo
+			tempoQuartPerMin = file[0][mostPopulatedTrack][i].getTempoBPM();
 		}
 	}
 	
@@ -422,12 +435,51 @@ void MarkovChain::cleanRootPair(NotePair& pair)
 	}
 }
 
+void MarkovChain::cleanOutputFilenameSub(std::string & filename, char & toCheck)
+{
+	size_t position = filename.find(toCheck);
+	if (position != std::string::npos)
+	{
+		filename.erase(position);
+		cleanOutputFilenameSub(filename, toCheck);
+	}
+}
+
+void MarkovChain::cleanOutputFilename()
+{
+	//Check for invalid characters
+	std::vector<char> invalidCharacters = { '\'', '/', ':', '*', '?', '"', '<', '>', '|', '\n' };
+	for (char character : invalidCharacters)
+	{
+		if (outputFilename.find(character) != std::string::npos)
+		{
+			cleanOutputFilenameSub(outputFilename, character);
+		}
+	}
+	//Check if it contains the .mid extension already, remove it as it'll be appended later
+	size_t position = outputFilename.find('.');
+	if (position != std::string::npos)
+	{
+		std::string parsedFilename = outputFilename.substr(0, position);
+		if (parsedFilename.size() < 1)
+		{
+			outputFilename = defaultFilename;
+		}
+		else
+		{
+			outputFilename = parsedFilename;
+		}
+	}
+}
+
 MidiFile& MarkovChain::generateNewMidiFile()
 {
 	Notes noteClass;
 	MidiFile newFile;
 	newFile.addTrack();
 	newFile.setTicksPerQuarterNote(file->getTicksPerQuarterNote());
+	newFile[0].push_back(MidiEvent());
+	newFile[0][0].setMetaTempo(tempoQuartPerMin);
 
 	int trackLength = 0;
 	for (int i = 0; i < file[0][mostPopulatedTrack].getSize(); i++)
@@ -481,7 +533,7 @@ MidiFile& MarkovChain::generateNewMidiFile()
 		}
 	}
 
-	const std::string newfilename = "fileout.mid";
+	const std::string newfilename = (outputFilename + ".mid");
 	newFile.write(newfilename);
 	return newFile;
 }

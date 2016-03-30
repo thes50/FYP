@@ -37,7 +37,10 @@ private:
 	PauseCounter           pauseCounter;
 	int                    mostPopulatedTrack;
 	int                    parsingNumber = 1;
+	int					   tempoQuartPerMin = 120;
 	bool                   forceContinueThroughError = true;
+	const std::string      defaultFilename = "fileout";
+	std::string            outputFilename = defaultFilename;
 	NotePair               startingPair;
 	MidiFile               *file;
 
@@ -46,6 +49,8 @@ private:
 	void writePause                          (long& tick, long length);
 	void cleanTables                         ();
 	void cleanRootPair                       (NotePair& pair);
+	void cleanOutputFilename                 ();
+	void cleanOutputFilenameSub              (std::string& filename, char& toCheck);
 	template <class Map> void cleanTable     (Map& map, std::string table);
 	template <class T, class P1, class P2> T countInSubmap(T a);
 	template <class PMap, class Map> Map findNextGoodMap(PMap& parent, int index);
@@ -62,6 +67,7 @@ public:
 	bool getForceContinueFlag     ();
 	void setBreakdownResolution   (int resolution);
 	void setForceContinueFlag     (bool state);
+	void setOutputFilename        (const std::string filename);
 	int  getBreakdownResolution   ();
 	MidiFile& generateNewMidiFile ();
 };
