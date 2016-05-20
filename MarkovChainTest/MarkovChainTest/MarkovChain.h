@@ -91,6 +91,10 @@ inline void MarkovChain::cleanTable(Map& map, std::string table)
 #endif
 					goto breakOut;
 				}
+				else
+				{
+					break;
+				}
 			}
 		}
 		breakOut:;

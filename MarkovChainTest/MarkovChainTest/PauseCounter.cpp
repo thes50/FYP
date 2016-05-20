@@ -2,7 +2,7 @@
 
 PauseCounter::PauseCounter()
 {
-	pauseCount  = 0;
+	pauseCount = 0;
 	pausesTotal = 0;
 }
 

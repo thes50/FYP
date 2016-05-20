@@ -2,10 +2,11 @@
 
 int main()
 {
-	//fur elise
+	//fur elise.mid
 	//"moonlight-movement1.mid";
 	//"tnfdm.mid";
-	std::string track = "fur elise.mid";
+	//rondo alla turca
+	std::string track = "moonlight-movement1.mid";
 	MarkovChain chainSingle;
 	MarkovChain chainBroken;
 	bool statusSingle = chainSingle.createFromMidiFile(track);

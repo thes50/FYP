@@ -1,4 +1,3 @@
-<?php ?>
 <html lang="en">
 	<head>
 		<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
@@ -7,14 +6,121 @@
 
 	<body>
 		<div class="main">
-			<h2>Explanation</h2>
-			<p>Hello, I'm conducting research into Algorithmic Music Composition and whether or not it's possible to create reasonably similar compositions using an imitation focused algorithm. The main set of questions will ask you to decide which of two audio samples is closer to the original. 
+			<h2>For each question below please choose the track which is the closest imitation of the original track.</h2>
 
-			After this an additional, optional set of questions will be asked with more general questions. You do not have to answer these questions.</p>
-			&nbsp;
-			
-			<h3></h3>
-			<button class="button">Submit</button>
+			<form action="submit.php" method="post">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td><h3>Question One:</h3></td></tr>
+						<tr>
+							<td>Original:</td>
+							<td><audio controls>
+								<source src="audio/Q1-Original.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr>
+							<td>Sample One: <input type="radio" name="Q1" value="1"></td>
+							<td><audio controls>
+								<source src="audio/Q1-15.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr>
+							<td>Sample Two: <input type="radio" name="Q1" value="2"></td>
+							<td><audio controls>
+								<source src="audio/Q1-1.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr><td></td></tr>
+						<tr><td><h3>Question Two:</h3></td></tr>
+						<tr>
+							<td>Original:</td>
+							<td><audio controls>
+								<source src="audio/Q2-Original.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr>
+							<td>Sample One: <input type="radio" name="Q2" value="1"></td>
+							<td><audio controls>
+								<source src="audio/Q2-15.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr>
+							<td>Sample Two: <input type="radio" name="Q2" value="2"></td>
+							<td><audio controls>
+								<source src="audio/Q2-1.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr><td></td></tr>
+						<tr><td><h3>Question Three:</h3></td></tr>
+						<tr>
+							<td>Original:</td>
+							<td><audio controls>
+								<source src="audio/Q3-Original.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr>
+							<td>Sample One: <input type="radio" name="Q3" value="1"></td>
+							<td><audio controls>
+								<source src="audio/Q3-15.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr>
+							<td>Sample Two: <input type="radio" name="Q3" value="2"></td>
+							<td><audio controls>
+								<source src="audio/Q3-1.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr><td></td></tr>
+						<tr><td><h3>Question Four:</h3></td></tr>
+						<tr>
+							<td>Original:</td>
+							<td><audio controls>
+								<source src="audio/Q4-Original.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr>
+							<td>Sample One: <input type="radio" name="Q4" value="1"></td>
+							<td><audio controls>
+								<source src="audio/Q4-15.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+						<tr>
+							<td>Sample Two: <input type="radio" name="Q4" value="2"></td>
+							<td><audio controls>
+								<source src="audio/Q4-1.wav" type="audio/wav">
+							</audio></td>
+						</tr>
+
+
+						<tr><td></td></tr>
+						<tr><td><h3>Other feedback:</h3></td></tr>
+						<tr>
+							<td><textarea name="Q5"></textarea></td>
+						</tr>
+					</tbody>
+				</table>
+				<br />
+				<br />
+				&nbsp;&nbsp;
+				<button class="button">Submit</button>
+			</form>
 		</div>
 	</body>
 </html>

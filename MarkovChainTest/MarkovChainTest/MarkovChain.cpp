@@ -1,6 +1,6 @@
 #include "MarkovChain.h"
 
-MarkovChain::MarkovChain()
+MarkovChain::MarkovChain()x
 {
 	file = nullptr;
 }
@@ -317,10 +317,9 @@ bool MarkovChain::analyseMidiFile()
 	for (int i = 1; i < (parsingNumber+1); i++)
 	{
 		auto it1 = std::next(noteList.begin(), (i - 1) * size);
-		auto it2 = std::next(noteList.begin(), size * i);
+		auto it2 = std::next(noteList.begin(), i * size);
 		wrappingIndexContainer.push_back(std::vector<int>(it1,it2));
 	}
-	//wrappingIndexContainer.push_back(std::vector<int>(noteList.begin(), noteList.end()));
 
 	for (int ind = 0; ind < parsingNumber; ind++)
 	{
@@ -488,19 +487,6 @@ MidiFile& MarkovChain::generateNewMidiFile()
 		{
 			trackLength++;
 		}
-	}
-
-	int trackLengthShort = std::round(trackLength / 10);
-	int trackLengthMin = 0;
-	int trackLengtMax = trackLength + trackLengthShort;
-
-	if ((trackLength - trackLengthShort) < 120)
-	{
-		trackLengthMin = 120;
-	}
-	else
-	{
-		trackLengthMin = trackLength - trackLengthShort;
 	}
 
 	//Build new track.
